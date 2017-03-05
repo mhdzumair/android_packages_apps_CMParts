@@ -685,4 +685,8 @@
     <string name="navigation_bar_size_30_dp">30 dp</string>
     <string name="navigation_bar_size_24_dp">24 dp</string>
 
+    <!-- Pixel navbar animation -->
+    <string name="pixel_navbar_anim_title">Home button animation</string>
+    <string name="pixel_navbar_anim_summary">Enable the home button animation</string>
+
 </resources>
