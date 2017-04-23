@@ -68,6 +68,7 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
     private static final String KEY_VOLUME_KEY_CURSOR_CONTROL = "volume_key_cursor_control";
     private static final String KEY_SWAP_VOLUME_BUTTONS = "swap_volume_buttons";
     private static final String DISABLE_NAV_KEYS = "disable_nav_keys";
+    private static final String NAV_BAR_DYNAMIC = "nav_bar_dynamic";
     private static final String KEY_NAVIGATION_BAR_LEFT = "navigation_bar_left";
     private static final String KEY_NAVIGATION_HOME_LONG_PRESS = "navigation_home_long_press";
     private static final String KEY_NAVIGATION_HOME_DOUBLE_TAP = "navigation_home_double_tap";
@@ -147,6 +148,7 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
     private SwitchPreference mVolumeMusicControls;
     private SwitchPreference mSwapVolumeButtons;
     private SwitchPreference mDisableNavigationKeys;
+    private SwitchPreference mNavBarDynamic;
     private SwitchPreference mNavigationBarLeftPref;
     private ListPreference mNavigationHomeLongPressAction;
     private ListPreference mNavigationHomeDoubleTapAction;
@@ -466,6 +468,11 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
                 mVolumeWakeScreen.setDisableDependentsState(true);
             }
         }
+        
+        mNavBarDynamic = (SwitchPreference) findPreference(NAV_BAR_DYNAMIC);
+        mNavBarDynamic.setChecked((Settings.System.getInt(getContentResolver(),
+                Settings.System.NAV_BAR_DYNAMIC, 0) == 1));
+        mNavBarDynamic.setOnPreferenceChangeListener(this);
     }
 
     @Override
@@ -643,7 +650,12 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
             handleListChange(mTorchLongPressPowerTimeout, newValue,
                     CMSettings.System.TORCH_LONG_PRESS_POWER_TIMEOUT);
             return true;
-        }
+        } else if (preference == mNavBarDynamic) {
+            boolean value = (Boolean) newValue;
+            Settings.System.putInt(getContentResolver(),
+                    Settings.System.NAV_BAR_DYNAMIC, value ? 1 : 0);
+            return true;
+	    }
         return false;
     }
 

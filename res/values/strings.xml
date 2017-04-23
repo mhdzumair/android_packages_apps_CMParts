@@ -689,4 +689,7 @@
     <string name="pixel_navbar_anim_title">Home button animation</string>
     <string name="pixel_navbar_anim_summary">Enable the home button animation</string>
 
+    <string name="nav_bar_dynamic_title">Navigation bar dynamic color</string>
+    <string name="nav_bar_dynamic_summary">Change the navigation bar color to the app primary color</string>
+
 </resources>
