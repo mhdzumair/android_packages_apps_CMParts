@@ -26,6 +26,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.RemoteException;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.support.v14.preference.SwitchPreference;
 import android.support.v7.preference.ListPreference;
@@ -81,6 +82,8 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
             "torch_long_press_power_gesture";
     private static final String KEY_TORCH_LONG_PRESS_POWER_TIMEOUT =
             "torch_long_press_power_timeout";
+    private static final String KEY_TORCH_LONG_PRESS_POWER_PROXIMITY =
+            "torch_long_press_power_proximity";
 
     private static final String CATEGORY_POWER = "power_key";
     private static final String CATEGORY_HOME = "home_key";
@@ -157,6 +160,7 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
     private SwitchPreference mHomeAnswerCall;
     private SwitchPreference mTorchLongPressPowerGesture;
     private ListPreference mTorchLongPressPowerTimeout;
+    private SwitchPreference mTorchLongPressPowerProximity;
 
     private PreferenceCategory mNavigationPreferencesCat;
 
@@ -222,6 +226,12 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
                 CMSettings.System.TORCH_LONG_PRESS_POWER_TIMEOUT, 0);
         mTorchLongPressPowerTimeout = initList(KEY_TORCH_LONG_PRESS_POWER_TIMEOUT,
                 torchLongPressPowerTimeout);
+        mTorchLongPressPowerProximity =
+                (SwitchPreference) findPreference(KEY_TORCH_LONG_PRESS_POWER_PROXIMITY);
+        mTorchLongPressPowerProximity.setChecked(CMSettings.System.getIntForUser(resolver,
+                CMSettings.System.TORCH_LONG_PRESS_POWER_PROXIMITY, 1,
+                UserHandle.USER_CURRENT) == 1);
+        mTorchLongPressPowerProximity.setOnPreferenceChangeListener(this);
 
         // Home button answers calls.
         mHomeAnswerCall = (SwitchPreference) findPreference(KEY_HOME_ANSWER_CALL);
@@ -291,6 +301,7 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
             if (!QSUtils.deviceSupportsFlashLight(getActivity())) {
                 powerCategory.removePreference(mTorchLongPressPowerGesture);
                 powerCategory.removePreference(mTorchLongPressPowerTimeout);
+                powerCategory.removePreference(mTorchLongPressPowerProximity);
             }
         } else {
             prefScreen.removePreference(powerCategory);
@@ -649,6 +660,12 @@ public class ButtonSettings extends SettingsPreferenceFragment implements
         } else if (preference == mTorchLongPressPowerTimeout) {
             handleListChange(mTorchLongPressPowerTimeout, newValue,
                     CMSettings.System.TORCH_LONG_PRESS_POWER_TIMEOUT);
+            return true;
+        } else if (preference == mTorchLongPressPowerProximity) {
+			boolean value = (Boolean) newValue;
+            CMSettings.System.putIntForUser(getContentResolver(),
+                    CMSettings.System.TORCH_LONG_PRESS_POWER_PROXIMITY,
+                    value ? 1 : 0, UserHandle.USER_CURRENT);
             return true;
         } else if (preference == mNavBarDynamic) {
             boolean value = (Boolean) newValue;
