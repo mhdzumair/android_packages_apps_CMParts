@@ -19,8 +19,8 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.UserHandle;
-import android.os.UserHandle;
 import android.provider.Settings;
+//import android.support.v7.preference.DropDownPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceScreen;
@@ -37,9 +37,8 @@ import org.cyanogenmod.cmparts.PartsActivity;
 import org.cyanogenmod.cmparts.SettingsPreferenceFragment;
 import org.cyanogenmod.cmparts.R;
 import org.cyanogenmod.cmparts.widget.SwitchBar;
-import org.cyanogenmod.cmparts.widget.TrafficBarPreference;
 
-public class CustomHeaders extends SettingsPreferenceFragment implements 
+public class CustomHeaders extends SettingsPreferenceFragment implements
     SwitchBar.OnSwitchChangeListener, Preference.OnPreferenceChangeListener {
 
     private static final String CUSTOM_HEADERS = "status_bar_custom_header";
@@ -52,7 +51,7 @@ public class CustomHeaders extends SettingsPreferenceFragment implements
     private SwitchBar mSwitchBar;
     private ListPreference mDaylightHeaderPack;
     private ListPreference mHeaderProvider;
-    private TrafficBarPreference mHeaderShadow;
+    //private DropDownPreference mHeaderShadow;
     private PreferenceScreen mHeaderBrowse;
     private String mDaylightHeaderProvider;
     private String mProviderName;
@@ -60,7 +59,6 @@ public class CustomHeaders extends SettingsPreferenceFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
         boolean isEnabled = Settings.System.getInt(getActivity().getContentResolver(),
                 Settings.System.STATUS_BAR_CUSTOM_HEADER, 0) == 1;
         
@@ -92,11 +90,11 @@ public class CustomHeaders extends SettingsPreferenceFragment implements
         mDaylightHeaderPack.setSummary(mDaylightHeaderPack.getEntry());
         mDaylightHeaderPack.setOnPreferenceChangeListener(this);
 
-        mHeaderShadow = (TrafficBarPreference) findPreference(CUSTOM_HEADER_IMAGE_SHADOW);
+        /*mHeaderShadow = (DropDownPreference) findPreference(CUSTOM_HEADER_IMAGE_SHADOW);
         int headerShadow = Settings.System.getInt(resolver,
                 Settings.System.STATUS_BAR_CUSTOM_HEADER_SHADOW, 80);
-        mHeaderShadow.setValue(headerShadow);
-        mHeaderShadow.setOnPreferenceChangeListener(this);
+        mHeaderShadow.setValue(String.valueOf(headerShadow));
+        mHeaderShadow.setOnPreferenceChangeListener(this);*/
 
         mDaylightHeaderProvider = getResources().getString(R.string.daylight_header_provider);
         mProviderName = Settings.System.getString(resolver,
@@ -163,11 +161,11 @@ public class CustomHeaders extends SettingsPreferenceFragment implements
             int valueIndex = mDaylightHeaderPack.findIndexOfValue(value);
             mDaylightHeaderPack.setSummary(mDaylightHeaderPack.getEntries()[valueIndex]);
             return true;
-         } else if (preference == mHeaderShadow) {
+         /*} else if (preference == mHeaderShadow) {
             int headerShadow = (Integer) newValue;
             Settings.System.putInt(resolver,
                     Settings.System.STATUS_BAR_CUSTOM_HEADER_SHADOW, headerShadow);
-            return true;
+            return true;*/
          } else if (preference == mHeaderProvider) {
             String value = (String) newValue;
             Settings.System.putString(resolver,
